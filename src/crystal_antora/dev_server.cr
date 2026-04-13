@@ -205,19 +205,19 @@ module CrystalAntora
 
     private def mime_type(path : String) : String
       case File.extname(path).downcase
-      when ".html" then "text/html"
-      when ".css"  then "text/css"
-      when ".js"   then "application/javascript"
-      when ".json" then "application/json"
-      when ".png"  then "image/png"
+      when ".html"         then "text/html"
+      when ".css"          then "text/css"
+      when ".js"           then "application/javascript"
+      when ".json"         then "application/json"
+      when ".png"          then "image/png"
       when ".jpg", ".jpeg" then "image/jpeg"
-      when ".gif"  then "image/gif"
-      when ".svg"  then "image/svg+xml"
-      when ".xml"  then "application/xml"
-      when ".pdf"  then "application/pdf"
-      when ".woff" then "font/woff"
-      when ".woff2" then "font/woff2"
-      else              "application/octet-stream"
+      when ".gif"          then "image/gif"
+      when ".svg"          then "image/svg+xml"
+      when ".xml"          then "application/xml"
+      when ".pdf"          then "application/pdf"
+      when ".woff"         then "font/woff"
+      when ".woff2"        then "font/woff2"
+      else                      "application/octet-stream"
       end
     end
 

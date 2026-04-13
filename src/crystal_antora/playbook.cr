@@ -44,7 +44,7 @@ module CrystalAntora
         @idp_sso_url = "",
         @idp_cert = "",
         @sp_entity_id = "",
-        @assertion_consumer_url = ""
+        @assertion_consumer_url = "",
       )
       end
     end
@@ -65,7 +65,7 @@ module CrystalAntora
         @protected_modules = [] of String,
         @login_page = "/login",
         @session_secret = "",
-        @saml = SAMLConfig.new
+        @saml = SAMLConfig.new,
       )
       end
     end
@@ -92,7 +92,7 @@ module CrystalAntora
       @ui = UIConfig.new,
       @output = OutputConfig.new,
       @auth = AuthConfig.new,
-      @server = ServerConfig.new
+      @server = ServerConfig.new,
     )
     end
 

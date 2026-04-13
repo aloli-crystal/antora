@@ -149,7 +149,7 @@ module CrystalAntora
       content_html : String,
       prev_next_html : String,
       component_selector_html : String,
-      livereload : Bool
+      livereload : Bool,
     ) : String
       livereload_script = if livereload
                             <<-JS

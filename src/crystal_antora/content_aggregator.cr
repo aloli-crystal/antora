@@ -7,7 +7,7 @@ module CrystalAntora
     def initialize(
       @components = [] of Component,
       @files = [] of ContentFile,
-      @navigations = {} of String => Navigation
+      @navigations = {} of String => Navigation,
     )
     end
 

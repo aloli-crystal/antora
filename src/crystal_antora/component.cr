@@ -13,7 +13,7 @@ module CrystalAntora
       @title = "",
       @version = "",
       @nav = [] of String,
-      @base_path = ""
+      @base_path = "",
     )
     end
 

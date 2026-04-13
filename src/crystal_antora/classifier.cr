@@ -19,7 +19,7 @@ module CrystalAntora
       @family = FileFamily::Page,
       @module_name = "ROOT",
       @component_name = "",
-      @relative_path = ""
+      @relative_path = "",
     )
     end
 
