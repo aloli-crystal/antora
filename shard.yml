@@ -1,0 +1,30 @@
+name: crystal-antora
+version: 0.1.0
+description: |
+  AsciiDoc documentation site generator for Crystal, inspired by Antora.
+  Generates static multi-component documentation sites from AsciiDoc sources.
+  Supports authentication (kemal-auth, SAML v2) for protected sections.
+authors:
+  - Philippe Nénert <philippe@aloli.fr>
+license: MIT
+dependencies:
+  crystal-asciidoctor:
+    github: aloli-crystal/crystal-asciidoctor
+    version: "~> 2.0"
+  crystal-rouge:
+    github: aloli-crystal/crystal-rouge
+    version: "~> 4.7"
+  kemal:
+    github: kemalcr/kemal
+    version: "~> 1.5"
+  kemal-auth:
+    github: aloli-crystal/kemal-auth
+    version: "~> 0.1"
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
+    version: "~> 1.6"
+targets:
+  crystal-antora:
+    main: bin/crystal-antora
+crystal: ">= 1.19.0"

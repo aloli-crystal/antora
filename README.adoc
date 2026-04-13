@@ -1,0 +1,239 @@
+= Crystal Antora
+:toc: macro
+:toc-title: Table of Contents
+:source-highlighter: rouge
+
+AsciiDoc documentation site generator for Crystal, inspired by https://antora.org[Antora].
+Generates static multi-component documentation sites from AsciiDoc sources with optional authentication support.
+
+toc::[]
+
+== Features
+
+* *AsciiDoc-based documentation* -- Write your docs in AsciiDoc, the powerful markup language
+* *Multi-component sites* -- Organize documentation into multiple components and modules
+* *Navigation generation* -- Automatic navigation from `nav.adoc` files with nested lists
+* *Built-in dev server* -- Live-reload development server powered by Kemal
+* *Modern default theme* -- Clean, responsive design with dark mode support
+* *Authentication support* -- Optional authentication via kemal-auth or SAML v2
+* *Code highlighting* -- Source code highlighting via Crystal Rouge
+* *Static site output* -- Generate a fully static site for deployment anywhere
+* *Sitemap generation* -- Automatic `sitemap.xml` for SEO
+* *Scaffolding* -- Quick project initialization with `crystal-antora init`
+
+== Installation
+
+Add the dependency to your `shard.yml`:
+
+[source,yaml]
+----
+dependencies:
+  crystal-antora:
+    github: aloli-crystal/crystal-antora
+    version: "~> 0.1"
+----
+
+Run `shards install`.
+
+Or install the CLI globally:
+
+[source,bash]
+----
+git clone https://github.com/aloli-crystal/crystal-antora.git
+cd crystal-antora
+shards build --release
+# Copy bin/crystal-antora to your PATH
+----
+
+== Quick Start
+
+=== Initialize a new project
+
+[source,bash]
+----
+crystal-antora init
+----
+
+This creates:
+
+* `site.yml` -- Site playbook configuration
+* `antora.yml` -- Component descriptor
+* `modules/ROOT/pages/index.adoc` -- Home page
+* `modules/ROOT/nav.adoc` -- Navigation
+
+=== Build the site
+
+[source,bash]
+----
+crystal-antora build
+----
+
+The generated site will be in `./build/site/`.
+
+=== Start the dev server
+
+[source,bash]
+----
+crystal-antora serve
+----
+
+Opens a dev server at http://localhost:4000 with live-reload.
+
+== Project Structure
+
+[source]
+----
+my-docs/
+  site.yml              # Playbook
+  antora.yml            # Component descriptor
+  modules/
+    ROOT/               # Default module
+      nav.adoc          # Navigation
+      pages/            # Pages (converted to HTML)
+        index.adoc
+        getting-started.adoc
+      partials/         # Reusable partials (includeable)
+      images/           # Images (copied to output)
+      examples/         # Code examples (includeable)
+      attachments/      # Downloadable files (copied to output)
+    admin/              # Additional module
+      pages/
+        ...
+----
+
+== Configuration Reference
+
+=== site.yml (Playbook)
+
+[source,yaml]
+----
+site:
+  title: "My Documentation"
+  url: https://docs.example.com
+  start_page: component::index.adoc
+
+content:
+  sources:
+    - url: ./docs
+      branches: HEAD
+      start_path: .
+
+ui:
+  bundle: default
+
+output:
+  dir: ./build/site
+
+auth:
+  enabled: false
+  provider: kemal-auth  # or saml
+  protected_components: []
+  protected_modules: []
+  login_page: /login
+  session_secret: ${SESSION_SECRET}
+  saml:
+    idp_sso_url: ""
+    idp_cert: ""
+    sp_entity_id: ""
+    assertion_consumer_url: ""
+
+server:
+  host: localhost
+  port: 4000
+  livereload: true
+----
+
+Environment variables can be used with `${VAR_NAME}` syntax.
+
+=== antora.yml (Component Descriptor)
+
+[source,yaml]
+----
+name: my-component
+title: My Component
+version: '1.0'
+nav:
+  - modules/ROOT/nav.adoc
+----
+
+=== Navigation (nav.adoc)
+
+[source,asciidoc]
+----
+* xref:index.adoc[Home]
+* xref:getting-started.adoc[Getting Started]
+** xref:installation.adoc[Installation]
+** xref:tutorial.adoc[Tutorial]
+* xref:reference.adoc[Reference]
+----
+
+== Authentication
+
+Authentication is optional and disabled by default. Two providers are supported:
+
+=== kemal-auth
+
+Session-based authentication with a login form.
+
+[source,yaml]
+----
+auth:
+  enabled: true
+  provider: kemal-auth
+  protected_components:
+    - admin
+  session_secret: ${SESSION_SECRET}
+----
+
+=== SAML v2
+
+SAML SSO authentication with an external Identity Provider.
+
+[source,yaml]
+----
+auth:
+  enabled: true
+  provider: saml
+  saml:
+    idp_sso_url: https://idp.example.com/sso
+    idp_cert: "..."
+    sp_entity_id: https://docs.example.com
+    assertion_consumer_url: https://docs.example.com/saml/callback
+----
+
+== CLI Options
+
+[source]
+----
+Usage: crystal-antora <command> [options]
+
+Commands:
+  build       Generate the static site
+  serve       Build and start dev server with live-reload
+  init        Scaffold a new documentation project
+
+Options:
+  --playbook FILE   Path to playbook file (default: site.yml)
+  --output DIR      Output directory
+  --port NUM        Dev server port
+  -h, --help        Show help
+  -v, --version     Show version
+----
+
+== Development
+
+[source,bash]
+----
+git clone https://github.com/aloli-crystal/crystal-antora.git
+cd crystal-antora
+shards install
+crystal spec
+----
+
+== License
+
+This project is licensed under the MIT License. See the link:LICENSE[LICENSE] file for details.
+
+== Author
+
+Philippe Nenert <philippe@aloli.fr>

@@ -1,0 +1,36 @@
+= Welcome to My Project
+
+Welcome to the documentation for My Project.
+
+== Getting Started
+
+To get started, follow the instructions below.
+
+=== Installation
+
+Add the dependency to your project:
+
+[source,crystal]
+----
+# Your installation instructions here
+----
+
+=== Quick Start
+
+Here is a simple example to get you started:
+
+[source,crystal]
+----
+puts "Hello from My Project!"
+----
+
+== Features
+
+* Feature one
+* Feature two
+* Feature three
+
+== Next Steps
+
+* xref:getting-started.adoc[Getting Started Guide]
+* xref:reference.adoc[API Reference]

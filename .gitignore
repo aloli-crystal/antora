@@ -1,0 +1,13 @@
+/docs/
+/lib/
+/bin/
+!/bin/crystal-antora
+/.shards/
+*.dwarf
+/build/
+
+# Editor files
+*.swp
+*~
+.idea/
+.vscode/

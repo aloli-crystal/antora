@@ -1,0 +1,34 @@
+site:
+  title: "My Documentation"
+  url: https://docs.example.com
+  start_page: my-project::index.adoc
+
+content:
+  sources:
+    - url: ./docs
+      branches: HEAD
+      start_path: .
+
+ui:
+  bundle: default
+
+output:
+  dir: ./build/site
+
+auth:
+  enabled: false
+  provider: kemal-auth
+  protected_components: []
+  protected_modules: []
+  login_page: /login
+  session_secret: ${SESSION_SECRET}
+  saml:
+    idp_sso_url: ""
+    idp_cert: ""
+    sp_entity_id: ""
+    assertion_consumer_url: ""
+
+server:
+  host: localhost
+  port: 4000
+  livereload: true

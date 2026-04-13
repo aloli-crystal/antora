@@ -1,0 +1,193 @@
+require "../src/crystal_antora"
+require "option_parser"
+require "file_utils"
+
+module CrystalAntora
+  class CLI
+    property playbook_path : String = "site.yml"
+    property output_dir : String? = nil
+    property port : Int32? = nil
+    property command : String = ""
+
+    def run(args : Array(String))
+      parser = OptionParser.new do |opts|
+        opts.banner = "Usage: crystal-antora <command> [options]"
+
+        opts.on("--playbook FILE", "Path to playbook file (default: site.yml)") do |file|
+          @playbook_path = file
+        end
+
+        opts.on("--output DIR", "Output directory") do |dir|
+          @output_dir = dir
+        end
+
+        opts.on("--port NUM", "Dev server port") do |num|
+          @port = num.to_i32
+        end
+
+        opts.on("-h", "--help", "Show help") do
+          puts opts
+          exit 0
+        end
+
+        opts.on("-v", "--version", "Show version") do
+          puts "crystal-antora #{VERSION}"
+          exit 0
+        end
+
+        opts.unknown_args do |remaining, _|
+          @command = remaining.first? || ""
+        end
+      end
+
+      parser.parse(args)
+
+      case command
+      when "build"
+        cmd_build
+      when "serve"
+        cmd_serve
+      when "init"
+        cmd_init
+      when ""
+        puts parser
+        exit 1
+      else
+        STDERR.puts "Unknown command: #{command}"
+        STDERR.puts "Available commands: build, serve, init"
+        exit 1
+      end
+    end
+
+    private def cmd_build
+      playbook = load_playbook
+      if dir = output_dir
+        playbook.output.dir = dir
+      end
+
+      puts "Building site..."
+      aggregator = ContentAggregator.new(playbook)
+      catalog = aggregator.aggregate
+      converter = Converter.new(catalog)
+      composer = PageComposer.new(playbook, catalog, converter)
+      publisher = SitePublisher.new(playbook, catalog, composer)
+      publisher.publish
+
+      puts "Site built successfully in #{playbook.output.dir}"
+      puts "  #{catalog.pages.size} pages"
+      puts "  #{catalog.images.size} images"
+      puts "  #{catalog.components.size} components"
+    end
+
+    private def cmd_serve
+      playbook = load_playbook
+      if dir = output_dir
+        playbook.output.dir = dir
+      end
+      if p = port
+        playbook.server.port = p
+      end
+
+      puts "Building site..."
+      aggregator = ContentAggregator.new(playbook)
+      catalog = aggregator.aggregate
+      converter = Converter.new(catalog)
+      composer = PageComposer.new(playbook, catalog, converter)
+      publisher = SitePublisher.new(playbook, catalog, composer)
+      publisher.publish
+
+      puts "Starting dev server..."
+      server = DevServer.new(playbook, catalog, composer, converter)
+      server.start
+    end
+
+    private def cmd_init
+      puts "Scaffolding new documentation project..."
+
+      FileUtils.mkdir_p("modules/ROOT/pages")
+      FileUtils.mkdir_p("modules/ROOT/partials")
+      FileUtils.mkdir_p("modules/ROOT/images")
+      FileUtils.mkdir_p("modules/ROOT/examples")
+      FileUtils.mkdir_p("modules/ROOT/attachments")
+
+      unless File.exists?("site.yml")
+        File.write("site.yml", <<-YAML
+        site:
+          title: "My Documentation"
+          url: http://localhost:4000
+          start_page: my-project::index.adoc
+
+        content:
+          sources:
+            - url: .
+              branches: HEAD
+              start_path: .
+
+        ui:
+          bundle: default
+
+        output:
+          dir: ./build/site
+
+        auth:
+          enabled: false
+
+        server:
+          host: localhost
+          port: 4000
+          livereload: true
+        YAML
+        )
+      end
+
+      unless File.exists?("antora.yml")
+        File.write("antora.yml", <<-YAML
+        name: my-project
+        title: My Project
+        version: '1.0'
+        nav:
+          - modules/ROOT/nav.adoc
+        YAML
+        )
+      end
+
+      unless File.exists?("modules/ROOT/nav.adoc")
+        File.write("modules/ROOT/nav.adoc", <<-ADOC
+        * xref:index.adoc[Home]
+        ADOC
+        )
+      end
+
+      unless File.exists?("modules/ROOT/pages/index.adoc")
+        File.write("modules/ROOT/pages/index.adoc", <<-ADOC
+        = Welcome
+
+        Welcome to your documentation site!
+
+        == Getting Started
+
+        Edit this page at `modules/ROOT/pages/index.adoc`.
+        ADOC
+        )
+      end
+
+      puts "Documentation project initialized!"
+      puts "  Created: site.yml, antora.yml"
+      puts "  Created: modules/ROOT/pages/index.adoc"
+      puts ""
+      puts "Next steps:"
+      puts "  crystal-antora build    # Build the site"
+      puts "  crystal-antora serve    # Start dev server"
+    end
+
+    private def load_playbook : Playbook
+      unless File.exists?(playbook_path)
+        STDERR.puts "Error: Playbook not found: #{playbook_path}"
+        exit 1
+      end
+      Playbook.load(playbook_path)
+    end
+  end
+end
+
+CrystalAntora::CLI.new.run(ARGV)
