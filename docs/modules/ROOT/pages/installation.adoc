@@ -1,0 +1,25 @@
+= Installation
+
+== As a Library
+
+Add the dependency to your `shard.yml`:
+
+[source,yaml]
+----
+dependencies:
+  crystal-antora:
+    github: aloli-crystal/crystal-antora
+    version: "~> 0.1"
+----
+
+Run `shards install`.
+
+== CLI Global Install
+
+[source,bash]
+----
+git clone https://github.com/aloli-crystal/crystal-antora.git
+cd crystal-antora
+shards build --release
+# Copy bin/crystal-antora to your PATH
+----

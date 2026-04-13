@@ -1,0 +1,20 @@
+= Crystal Antora
+
+Generateur de sites de documentation AsciiDoc pour Crystal, inspire par https://antora.org[Antora]. Genere des sites de documentation statiques multi-composants a partir de sources AsciiDoc avec support optionnel de l'authentification.
+
+== Fonctionnalites
+
+* *Documentation AsciiDoc* -- Redigez votre documentation en AsciiDoc
+* *Sites multi-composants* -- Organisez la documentation en plusieurs composants et modules
+* *Generation de navigation* -- Navigation automatique a partir des fichiers `nav.adoc`
+* *Serveur de developpement integre* -- Rechargement en direct via Kemal
+* *Theme par defaut moderne* -- Design adaptatif avec mode sombre
+* *Support de l'authentification* -- Via kemal-auth ou SAML v2
+* *Coloration syntaxique* -- Via Crystal Rouge
+* *Sortie en site statique* -- Deployable partout
+* *Generation de sitemap* -- `sitemap.xml` automatique
+* *Echafaudage* -- Initialisation rapide avec `crystal-antora init`
+
+== Licence
+
+MIT

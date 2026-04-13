@@ -1,0 +1,124 @@
+= Usage
+
+== Quick Start
+
+=== Initialize a New Project
+
+[source,bash]
+----
+crystal-antora init
+----
+
+This creates:
+
+* `site.yml` -- Site playbook configuration
+* `antora.yml` -- Component descriptor
+* `modules/ROOT/pages/index.adoc` -- Home page
+* `modules/ROOT/nav.adoc` -- Navigation
+
+=== Build the Site
+
+[source,bash]
+----
+crystal-antora build
+----
+
+The generated site will be in `./build/site/`.
+
+=== Start the Dev Server
+
+[source,bash]
+----
+crystal-antora serve
+----
+
+Opens a dev server at http://localhost:4000 with live-reload.
+
+== Project Structure
+
+[source]
+----
+my-docs/
+  site.yml              # Playbook
+  antora.yml            # Component descriptor
+  modules/
+    ROOT/               # Default module
+      nav.adoc          # Navigation
+      pages/            # Pages (converted to HTML)
+        index.adoc
+      partials/         # Reusable partials
+      images/           # Images
+      examples/         # Code examples
+      attachments/      # Downloadable files
+----
+
+== Configuration (site.yml)
+
+[source,yaml]
+----
+site:
+  title: "My Documentation"
+  url: https://docs.example.com
+  start_page: component::index.adoc
+
+content:
+  sources:
+    - url: ./docs
+      branches: HEAD
+      start_path: .
+
+ui:
+  bundle: default
+
+output:
+  dir: ./build/site
+----
+
+== Authentication
+
+Authentication is optional and disabled by default. Two providers:
+
+=== kemal-auth
+
+[source,yaml]
+----
+auth:
+  enabled: true
+  provider: kemal-auth
+  protected_components:
+    - admin
+  session_secret: ${SESSION_SECRET}
+----
+
+=== SAML v2
+
+[source,yaml]
+----
+auth:
+  enabled: true
+  provider: saml
+  saml:
+    idp_sso_url: https://idp.example.com/sso
+    idp_cert: "..."
+    sp_entity_id: https://docs.example.com
+    assertion_consumer_url: https://docs.example.com/saml/callback
+----
+
+== CLI Options
+
+[source]
+----
+Usage: crystal-antora <command> [options]
+
+Commands:
+  build       Generate the static site
+  serve       Build and start dev server with live-reload
+  init        Scaffold a new documentation project
+
+Options:
+  --playbook FILE   Path to playbook file (default: site.yml)
+  --output DIR      Output directory
+  --port NUM        Dev server port
+  -h, --help        Show help
+  -v, --version     Show version
+----

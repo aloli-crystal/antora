@@ -1,0 +1,79 @@
+= Utilisation
+
+== Demarrage Rapide
+
+=== Initialiser un Nouveau Projet
+
+[source,bash]
+----
+crystal-antora init
+----
+
+Cela cree :
+
+* `site.yml` -- Configuration du playbook
+* `antora.yml` -- Descripteur de composant
+* `modules/ROOT/pages/index.adoc` -- Page d'accueil
+* `modules/ROOT/nav.adoc` -- Navigation
+
+=== Construire le Site
+
+[source,bash]
+----
+crystal-antora build
+----
+
+Le site genere sera dans `./build/site/`.
+
+=== Demarrer le Serveur de Developpement
+
+[source,bash]
+----
+crystal-antora serve
+----
+
+Ouvre un serveur sur http://localhost:4000 avec rechargement en direct.
+
+== Structure du Projet
+
+[source]
+----
+ma-doc/
+  site.yml              # Playbook
+  antora.yml            # Descripteur de composant
+  modules/
+    ROOT/
+      nav.adoc          # Navigation
+      pages/
+        index.adoc
+----
+
+== Authentification
+
+Deux fournisseurs supportes :
+
+=== kemal-auth
+
+[source,yaml]
+----
+auth:
+  enabled: true
+  provider: kemal-auth
+  protected_components:
+    - admin
+  session_secret: ${SESSION_SECRET}
+----
+
+=== SAML v2
+
+[source,yaml]
+----
+auth:
+  enabled: true
+  provider: saml
+  saml:
+    idp_sso_url: https://idp.example.com/sso
+    idp_cert: "..."
+    sp_entity_id: https://docs.example.com
+    assertion_consumer_url: https://docs.example.com/saml/callback
+----
