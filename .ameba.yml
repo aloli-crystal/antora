@@ -30,3 +30,5 @@ Naming/AccessorMethodName:
   Enabled: false
 Style/VerboseBlock:
   Enabled: false
+Style/RedundantBegin:
+  Enabled: false
