@@ -24,6 +24,10 @@ shards:
     git: https://github.com/aloli-crystal/crystal-rouge.git
     version: 4.7.0
 
+  crystal-saml:
+    git: https://github.com/aloli-crystal/crystal-saml.git
+    version: 1.18.1+git.commit.cff01d1b9e6895a7ff7513f3e0ef58c5340ca91c
+
   ed25519:
     git: https://github.com/spider-gazelle/ed25519.git
     version: 1.1.0

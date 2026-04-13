@@ -20,6 +20,9 @@ dependencies:
   kemal-auth:
     github: aloli-crystal/kemal-auth
     version: "~> 0.1"
+  crystal-saml:
+    github: aloli-crystal/crystal-saml
+    branch: production
 development_dependencies:
   ameba:
     github: crystal-ameba/ameba

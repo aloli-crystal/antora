@@ -58,6 +58,9 @@ module CrystalAntora
       when "/saml/callback"
         handle_saml_callback(context)
         return
+      when "/saml/metadata"
+        handle_saml_metadata(context)
+        return
       end
 
       if auth_middleware.enabled? && auth_middleware.protected?(path)
@@ -188,6 +191,12 @@ module CrystalAntora
         context.response.content_type = "text/plain"
         context.response.print "SAML authentication failed"
       end
+    end
+
+    private def handle_saml_metadata(context : HTTP::Server::Context)
+      saml_sp = Auth::SAMLServiceProvider.new(playbook.auth.saml)
+      context.response.content_type = "application/xml"
+      context.response.print saml_sp.sp_metadata
     end
 
     private def extract_session_id(context : HTTP::Server::Context) : String?
