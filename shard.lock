@@ -26,7 +26,7 @@ shards:
 
   crystal-saml:
     git: https://github.com/aloli-crystal/crystal-saml.git
-    version: 1.18.1+git.commit.cff01d1b9e6895a7ff7513f3e0ef58c5340ca91c
+    version: 1.18.1+git.commit.aa72e38e7be82a871dd2a94c7ad539161e5e7d13
 
   ed25519:
     git: https://github.com/spider-gazelle/ed25519.git
