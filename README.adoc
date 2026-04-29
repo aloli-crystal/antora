@@ -19,7 +19,7 @@ toc::[]
 * *Code highlighting* -- Source code highlighting via Crystal Rouge
 * *Static site output* -- Generate a fully static site for deployment anywhere
 * *Sitemap generation* -- Automatic `sitemap.xml` for SEO
-* *Scaffolding* -- Quick project initialization with `crystal-antora init`
+* *Scaffolding* -- Quick project initialization with `antora init`
 
 == Installation
 
@@ -28,8 +28,8 @@ Add the dependency to your `shard.yml`:
 [source,yaml]
 ----
 dependencies:
-  crystal-antora:
-    github: aloli-crystal/crystal-antora
+  antora:
+    github: aloli-crystal/antora
     version: "~> 0.1"
 ----
 
@@ -39,10 +39,10 @@ Or install the CLI globally:
 
 [source,bash]
 ----
-git clone https://github.com/aloli-crystal/crystal-antora.git
-cd crystal-antora
+git clone https://github.com/aloli-crystal/antora.git
+cd antora
 shards build --release
-# Copy bin/crystal-antora to your PATH
+# Copy bin/antora to your PATH
 ----
 
 == Quick Start
@@ -51,7 +51,7 @@ shards build --release
 
 [source,bash]
 ----
-crystal-antora init
+antora init
 ----
 
 This creates:
@@ -65,7 +65,7 @@ This creates:
 
 [source,bash]
 ----
-crystal-antora build
+antora build
 ----
 
 The generated site will be in `./build/site/`.
@@ -74,7 +74,7 @@ The generated site will be in `./build/site/`.
 
 [source,bash]
 ----
-crystal-antora serve
+antora serve
 ----
 
 Opens a dev server at http://localhost:4000 with live-reload.
@@ -205,7 +205,7 @@ auth:
 
 [source]
 ----
-Usage: crystal-antora <command> [options]
+Usage: antora <command> [options]
 
 Commands:
   build       Generate the static site
@@ -224,8 +224,8 @@ Options:
 
 [source,bash]
 ----
-git clone https://github.com/aloli-crystal/crystal-antora.git
-cd crystal-antora
+git clone https://github.com/aloli-crystal/antora.git
+cd antora
 shards install
 crystal spec
 ----

@@ -1,5 +1,5 @@
-name: crystal-antora
-version: 0.1.0
+name: antora
+version: 0.1.1
 description: |
   AsciiDoc documentation site generator for Crystal, inspired by Antora.
   Generates static multi-component documentation sites from AsciiDoc sources.
@@ -28,6 +28,6 @@ development_dependencies:
     github: crystal-ameba/ameba
     version: "~> 1.6"
 targets:
-  crystal-antora:
-    main: bin/crystal-antora
+  antora:
+    main: src/antora.cr
 crystal: ">= 1.19.0"
