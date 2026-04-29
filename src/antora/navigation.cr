@@ -1,4 +1,4 @@
-module CrystalAntora
+module Antora
   class NavItem
     property title : String
     property url : String

@@ -1,6 +1,6 @@
 require "crystal-saml"
 
-module CrystalAntora
+module Antora
   module Auth
     class SAMLServiceProvider
       property config : Playbook::SAMLConfig

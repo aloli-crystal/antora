@@ -1,6 +1,6 @@
 require "file_utils"
 
-module CrystalAntora
+module Antora
   class SitePublisher
     property playbook : Playbook
     property catalog : ContentCatalog

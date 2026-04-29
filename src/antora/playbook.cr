@@ -1,6 +1,6 @@
 require "yaml"
 
-module CrystalAntora
+module Antora
   class Playbook
     class SiteConfig
       property title : String

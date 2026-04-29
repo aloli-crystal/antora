@@ -1,4 +1,4 @@
-module CrystalAntora
+module Antora
   module Theme
     CSS = <<-STYLESHEET
     :root {

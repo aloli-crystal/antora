@@ -1,5 +1,5 @@
 require "spec"
-require "../src/crystal_antora"
+require "../src/antora"
 require "file_utils"
 
 SPEC_TMP = File.join(Dir.tempdir, "crystal_antora_spec_#{Random::Secure.hex(4)}")
@@ -13,23 +13,23 @@ def cleanup_test_dir
   FileUtils.rm_rf(SPEC_TMP)
 end
 
-describe CrystalAntora do
+describe Antora do
   it "has a version" do
-    CrystalAntora::VERSION.should eq "0.1.0"
+    Antora::VERSION.should eq "0.1.0"
   end
 end
 
-describe CrystalAntora::Playbook do
+describe Antora::Playbook do
   describe ".substitute_env_vars" do
     it "replaces environment variables" do
       ENV["TEST_ANTORA_VAR"] = "hello_world"
-      result = CrystalAntora::Playbook.substitute_env_vars("value: ${TEST_ANTORA_VAR}")
+      result = Antora::Playbook.substitute_env_vars("value: ${TEST_ANTORA_VAR}")
       result.should eq "value: hello_world"
       ENV.delete("TEST_ANTORA_VAR")
     end
 
     it "replaces missing env vars with empty string" do
-      result = CrystalAntora::Playbook.substitute_env_vars("value: ${NONEXISTENT_TEST_VAR_XYZ}")
+      result = Antora::Playbook.substitute_env_vars("value: ${NONEXISTENT_TEST_VAR_XYZ}")
       result.should eq "value: "
     end
   end
@@ -73,7 +73,7 @@ describe CrystalAntora::Playbook do
       YAML
       )
 
-      playbook = CrystalAntora::Playbook.load(site_yml)
+      playbook = Antora::Playbook.load(site_yml)
 
       playbook.site.title.should eq "Test Docs"
       playbook.site.url.should eq "https://test.example.com"
@@ -105,7 +105,7 @@ describe CrystalAntora::Playbook do
       site_yml = File.join(SPEC_TMP, "site.yml")
       File.write(site_yml, "site:\n  title: Minimal\n")
 
-      playbook = CrystalAntora::Playbook.load(site_yml)
+      playbook = Antora::Playbook.load(site_yml)
       playbook.site.title.should eq "Minimal"
       playbook.server.port.should eq 4000
       playbook.auth.enabled.should be_false
@@ -127,7 +127,7 @@ describe CrystalAntora::Playbook do
       YAML
       )
 
-      playbook = CrystalAntora::Playbook.load(site_yml)
+      playbook = Antora::Playbook.load(site_yml)
       playbook.auth.session_secret.should eq "my-secret-key"
 
       ENV.delete("ANTORA_TEST_SECRET")
@@ -136,7 +136,7 @@ describe CrystalAntora::Playbook do
   end
 end
 
-describe CrystalAntora::Component do
+describe Antora::Component do
   it "parses antora.yml" do
     setup_test_dir
     antora_yml = File.join(SPEC_TMP, "antora.yml")
@@ -149,7 +149,7 @@ describe CrystalAntora::Component do
     YAML
     )
 
-    component = CrystalAntora::Component.load(antora_yml)
+    component = Antora::Component.load(antora_yml)
     component.name.should eq "my-component"
     component.title.should eq "My Component"
     component.version.should eq "1.0"
@@ -164,61 +164,61 @@ describe CrystalAntora::Component do
     antora_yml = File.join(SPEC_TMP, "antora.yml")
     File.write(antora_yml, "name: only-name\nversion: '2.0'\n")
 
-    component = CrystalAntora::Component.load(antora_yml)
+    component = Antora::Component.load(antora_yml)
     component.title.should eq "only-name"
 
     cleanup_test_dir
   end
 
   it "generates url_segment" do
-    comp = CrystalAntora::Component.new(name: "docs", version: "2.0")
+    comp = Antora::Component.new(name: "docs", version: "2.0")
     comp.url_segment.should eq "docs/2.0"
 
-    comp2 = CrystalAntora::Component.new(name: "docs", version: "")
+    comp2 = Antora::Component.new(name: "docs", version: "")
     comp2.url_segment.should eq "docs"
   end
 end
 
-describe CrystalAntora::Classifier do
+describe Antora::Classifier do
   it "classifies pages" do
-    file = CrystalAntora::Classifier.classify("/project/modules/ROOT/pages/index.adoc", "mycomp")
-    file.family.should eq CrystalAntora::FileFamily::Page
+    file = Antora::Classifier.classify("/project/modules/ROOT/pages/index.adoc", "mycomp")
+    file.family.should eq Antora::FileFamily::Page
     file.component_name.should eq "mycomp"
     file.module_name.should eq "ROOT"
   end
 
   it "classifies partials" do
-    file = CrystalAntora::Classifier.classify("/project/modules/ROOT/partials/header.adoc", "mycomp")
-    file.family.should eq CrystalAntora::FileFamily::Partial
+    file = Antora::Classifier.classify("/project/modules/ROOT/partials/header.adoc", "mycomp")
+    file.family.should eq Antora::FileFamily::Partial
   end
 
   it "classifies images" do
-    file = CrystalAntora::Classifier.classify("/project/modules/ROOT/images/logo.png", "mycomp")
-    file.family.should eq CrystalAntora::FileFamily::Image
+    file = Antora::Classifier.classify("/project/modules/ROOT/images/logo.png", "mycomp")
+    file.family.should eq Antora::FileFamily::Image
   end
 
   it "classifies attachments" do
-    file = CrystalAntora::Classifier.classify("/project/modules/ROOT/attachments/doc.pdf", "mycomp")
-    file.family.should eq CrystalAntora::FileFamily::Attachment
+    file = Antora::Classifier.classify("/project/modules/ROOT/attachments/doc.pdf", "mycomp")
+    file.family.should eq Antora::FileFamily::Attachment
   end
 
   it "classifies examples" do
-    file = CrystalAntora::Classifier.classify("/project/modules/ROOT/examples/sample.cr", "mycomp")
-    file.family.should eq CrystalAntora::FileFamily::Example
+    file = Antora::Classifier.classify("/project/modules/ROOT/examples/sample.cr", "mycomp")
+    file.family.should eq Antora::FileFamily::Example
   end
 
   it "extracts module name from path" do
-    file = CrystalAntora::Classifier.classify("/project/modules/admin/pages/users.adoc", "mycomp")
+    file = Antora::Classifier.classify("/project/modules/admin/pages/users.adoc", "mycomp")
     file.module_name.should eq "admin"
   end
 
   it "defaults to ROOT when no modules dir" do
-    file = CrystalAntora::Classifier.classify("/project/pages/index.adoc", "mycomp")
+    file = Antora::Classifier.classify("/project/pages/index.adoc", "mycomp")
     file.module_name.should eq "ROOT"
   end
 end
 
-describe CrystalAntora::Navigation do
+describe Antora::Navigation do
   it "parses simple nav.adoc" do
     content = <<-NAV
     * xref:index.adoc[Home]
@@ -226,7 +226,7 @@ describe CrystalAntora::Navigation do
     * xref:reference.adoc[Reference]
     NAV
 
-    nav = CrystalAntora::Navigation.parse(content)
+    nav = Antora::Navigation.parse(content)
     nav.items.size.should eq 3
     nav.items[0].title.should eq "Home"
     nav.items[0].url.should eq "index.adoc"
@@ -243,7 +243,7 @@ describe CrystalAntora::Navigation do
     * xref:reference.adoc[Reference]
     NAV
 
-    nav = CrystalAntora::Navigation.parse(content)
+    nav = Antora::Navigation.parse(content)
     nav.items.size.should eq 3
     nav.items[1].children.size.should eq 2
     nav.items[1].children[0].title.should eq "Installation"
@@ -258,7 +258,7 @@ describe CrystalAntora::Navigation do
     * xref:page3.adoc[Page 3]
     NAV
 
-    nav = CrystalAntora::Navigation.parse(content)
+    nav = Antora::Navigation.parse(content)
 
     prev_item, next_item = nav.find_prev_next("page2.adoc")
     prev_item.not_nil!.title.should eq "Page 1"
@@ -276,7 +276,7 @@ describe CrystalAntora::Navigation do
     ** xref:installation.adoc[Installation]
     NAV
 
-    nav = CrystalAntora::Navigation.parse(content)
+    nav = Antora::Navigation.parse(content)
     crumbs = nav.find_breadcrumbs("installation.adoc")
     crumbs.size.should eq 2
     crumbs[0].title.should eq "Getting Started"
@@ -284,18 +284,18 @@ describe CrystalAntora::Navigation do
   end
 
   it "returns empty for unknown page" do
-    nav = CrystalAntora::Navigation.parse("* xref:index.adoc[Home]")
+    nav = Antora::Navigation.parse("* xref:index.adoc[Home]")
     crumbs = nav.find_breadcrumbs("unknown.adoc")
     crumbs.should be_empty
   end
 end
 
-describe CrystalAntora::Converter do
+describe Antora::Converter do
   before_each { setup_test_dir }
   after_each { cleanup_test_dir }
 
   it "converts basic AsciiDoc to HTML" do
-    catalog = CrystalAntora::ContentCatalog.new
+    catalog = Antora::ContentCatalog.new
 
     page_dir = File.join(SPEC_TMP, "modules", "ROOT", "pages")
     FileUtils.mkdir_p(page_dir)
@@ -315,15 +315,15 @@ describe CrystalAntora::Converter do
     ADOC
     )
 
-    page = CrystalAntora::ContentFile.new(
+    page = Antora::ContentFile.new(
       path: page_path,
-      family: CrystalAntora::FileFamily::Page,
+      family: Antora::FileFamily::Page,
       module_name: "ROOT",
       component_name: "test",
       relative_path: "test.adoc"
     )
 
-    converter = CrystalAntora::Converter.new(catalog)
+    converter = Antora::Converter.new(catalog)
     html = converter.convert(page)
 
     html.should contain("<h1>Test Page</h1>")
@@ -334,7 +334,7 @@ describe CrystalAntora::Converter do
   end
 
   it "converts code blocks" do
-    catalog = CrystalAntora::ContentCatalog.new
+    catalog = Antora::ContentCatalog.new
 
     page_dir = File.join(SPEC_TMP, "pages")
     FileUtils.mkdir_p(page_dir)
@@ -349,8 +349,8 @@ describe CrystalAntora::Converter do
     ADOC
     )
 
-    page = CrystalAntora::ContentFile.new(path: page_path, family: CrystalAntora::FileFamily::Page)
-    converter = CrystalAntora::Converter.new(catalog)
+    page = Antora::ContentFile.new(path: page_path, family: Antora::FileFamily::Page)
+    converter = Antora::Converter.new(catalog)
     html = converter.convert(page)
 
     html.should contain("<pre><code")
@@ -359,7 +359,7 @@ describe CrystalAntora::Converter do
   end
 
   it "resolves xref links to .html" do
-    catalog = CrystalAntora::ContentCatalog.new
+    catalog = Antora::ContentCatalog.new
 
     page_dir = File.join(SPEC_TMP, "pages")
     FileUtils.mkdir_p(page_dir)
@@ -371,8 +371,8 @@ describe CrystalAntora::Converter do
     ADOC
     )
 
-    page = CrystalAntora::ContentFile.new(path: page_path, family: CrystalAntora::FileFamily::Page)
-    converter = CrystalAntora::Converter.new(catalog)
+    page = Antora::ContentFile.new(path: page_path, family: Antora::FileFamily::Page)
+    converter = Antora::Converter.new(catalog)
     html = converter.convert(page)
 
     html.should contain("other.html")
@@ -380,8 +380,8 @@ describe CrystalAntora::Converter do
   end
 
   it "extracts table of contents" do
-    catalog = CrystalAntora::ContentCatalog.new
-    converter = CrystalAntora::Converter.new(catalog)
+    catalog = Antora::ContentCatalog.new
+    converter = Antora::Converter.new(catalog)
     html = "<h2>First</h2><p>text</p><h3>Nested</h3><h2>Second</h2>"
     toc = converter.extract_toc(html)
     toc.size.should eq 3
@@ -393,24 +393,24 @@ describe CrystalAntora::Converter do
   end
 
   it "adds heading IDs" do
-    catalog = CrystalAntora::ContentCatalog.new
-    converter = CrystalAntora::Converter.new(catalog)
+    catalog = Antora::ContentCatalog.new
+    converter = Antora::Converter.new(catalog)
     html = "<h2>Getting Started</h2>"
     result = converter.add_heading_ids(html)
     result.should contain(%(id="getting-started"))
   end
 end
 
-describe CrystalAntora::PageComposer do
+describe Antora::PageComposer do
   before_each { setup_test_dir }
   after_each { cleanup_test_dir }
 
   it "composes a full HTML page" do
-    playbook = CrystalAntora::Playbook.new
+    playbook = Antora::Playbook.new
     playbook.site.title = "Test Site"
     playbook.server.livereload = false
 
-    catalog = CrystalAntora::ContentCatalog.new
+    catalog = Antora::ContentCatalog.new
 
     page_dir = File.join(SPEC_TMP, "modules", "ROOT", "pages")
     FileUtils.mkdir_p(page_dir)
@@ -422,16 +422,16 @@ describe CrystalAntora::PageComposer do
     ADOC
     )
 
-    page = CrystalAntora::ContentFile.new(
+    page = Antora::ContentFile.new(
       path: page_path,
-      family: CrystalAntora::FileFamily::Page,
+      family: Antora::FileFamily::Page,
       module_name: "ROOT",
       component_name: "test",
       relative_path: "index.adoc"
     )
 
-    converter = CrystalAntora::Converter.new(catalog)
-    composer = CrystalAntora::PageComposer.new(playbook, catalog, converter)
+    converter = Antora::Converter.new(catalog)
+    composer = Antora::PageComposer.new(playbook, catalog, converter)
     html = composer.compose(page)
 
     html.should contain("<!DOCTYPE html>")
@@ -444,20 +444,20 @@ describe CrystalAntora::PageComposer do
   end
 
   it "includes navigation when provided" do
-    playbook = CrystalAntora::Playbook.new
+    playbook = Antora::Playbook.new
     playbook.server.livereload = false
-    catalog = CrystalAntora::ContentCatalog.new
+    catalog = Antora::ContentCatalog.new
 
     page_dir = File.join(SPEC_TMP, "pages")
     FileUtils.mkdir_p(page_dir)
     page_path = File.join(page_dir, "index.adoc")
     File.write(page_path, "= Home\n\nContent.\n")
 
-    page = CrystalAntora::ContentFile.new(path: page_path, family: CrystalAntora::FileFamily::Page)
-    nav = CrystalAntora::Navigation.parse("* xref:index.adoc[Home]\n* xref:about.adoc[About]")
+    page = Antora::ContentFile.new(path: page_path, family: Antora::FileFamily::Page)
+    nav = Antora::Navigation.parse("* xref:index.adoc[Home]\n* xref:about.adoc[About]")
 
-    converter = CrystalAntora::Converter.new(catalog)
-    composer = CrystalAntora::PageComposer.new(playbook, catalog, converter)
+    converter = Antora::Converter.new(catalog)
+    composer = Antora::PageComposer.new(playbook, catalog, converter)
     html = composer.compose(page, nav)
 
     html.should contain("nav-menu")
@@ -465,12 +465,12 @@ describe CrystalAntora::PageComposer do
   end
 end
 
-describe CrystalAntora::SitePublisher do
+describe Antora::SitePublisher do
   before_each { setup_test_dir }
   after_each { cleanup_test_dir }
 
   it "publishes site with correct structure" do
-    playbook = CrystalAntora::Playbook.new
+    playbook = Antora::Playbook.new
     playbook.site.title = "Publish Test"
     playbook.site.url = "https://test.example.com"
     playbook.server.livereload = false
@@ -478,25 +478,25 @@ describe CrystalAntora::SitePublisher do
     output_dir = File.join(SPEC_TMP, "build", "site")
     playbook.output.dir = output_dir
 
-    catalog = CrystalAntora::ContentCatalog.new
+    catalog = Antora::ContentCatalog.new
 
     page_dir = File.join(SPEC_TMP, "src", "modules", "ROOT", "pages")
     FileUtils.mkdir_p(page_dir)
     page_path = File.join(page_dir, "index.adoc")
     File.write(page_path, "= Index\n\nHello world.\n")
 
-    page = CrystalAntora::ContentFile.new(
+    page = Antora::ContentFile.new(
       path: page_path,
-      family: CrystalAntora::FileFamily::Page,
+      family: Antora::FileFamily::Page,
       module_name: "ROOT",
       component_name: "mycomp",
       relative_path: "index.adoc"
     )
     catalog.files << page
 
-    converter = CrystalAntora::Converter.new(catalog)
-    composer = CrystalAntora::PageComposer.new(playbook, catalog, converter)
-    publisher = CrystalAntora::SitePublisher.new(playbook, catalog, composer)
+    converter = Antora::Converter.new(catalog)
+    composer = Antora::PageComposer.new(playbook, catalog, converter)
+    publisher = Antora::SitePublisher.new(playbook, catalog, composer)
     publisher.publish
 
     Dir.exists?(output_dir).should be_true
@@ -513,43 +513,43 @@ describe CrystalAntora::SitePublisher do
   end
 
   it "copies images to output" do
-    playbook = CrystalAntora::Playbook.new
+    playbook = Antora::Playbook.new
     playbook.server.livereload = false
     output_dir = File.join(SPEC_TMP, "build", "site")
     playbook.output.dir = output_dir
 
-    catalog = CrystalAntora::ContentCatalog.new
+    catalog = Antora::ContentCatalog.new
 
     img_dir = File.join(SPEC_TMP, "src", "modules", "ROOT", "images")
     FileUtils.mkdir_p(img_dir)
     img_path = File.join(img_dir, "logo.png")
     File.write(img_path, "FAKE_PNG_DATA")
 
-    image = CrystalAntora::ContentFile.new(
+    image = Antora::ContentFile.new(
       path: img_path,
-      family: CrystalAntora::FileFamily::Image,
+      family: Antora::FileFamily::Image,
       module_name: "ROOT",
       component_name: "mycomp",
       relative_path: "logo.png"
     )
     catalog.files << image
 
-    converter = CrystalAntora::Converter.new(catalog)
-    composer = CrystalAntora::PageComposer.new(playbook, catalog, converter)
-    publisher = CrystalAntora::SitePublisher.new(playbook, catalog, composer)
+    converter = Antora::Converter.new(catalog)
+    composer = Antora::PageComposer.new(playbook, catalog, converter)
+    publisher = Antora::SitePublisher.new(playbook, catalog, composer)
     publisher.publish
 
     File.exists?(File.join(output_dir, "_", "img", "mycomp", "ROOT", "logo.png")).should be_true
   end
 end
 
-describe CrystalAntora::Auth::AuthMiddleware do
+describe Antora::Auth::AuthMiddleware do
   it "checks if path is protected" do
-    playbook = CrystalAntora::Playbook.new
+    playbook = Antora::Playbook.new
     playbook.auth.enabled = true
     playbook.auth.protected_components = ["admin", "internal"]
 
-    middleware = CrystalAntora::Auth::AuthMiddleware.new(playbook)
+    middleware = Antora::Auth::AuthMiddleware.new(playbook)
 
     middleware.protected?("/admin/index.html").should be_true
     middleware.protected?("/internal/users.html").should be_true
@@ -557,30 +557,30 @@ describe CrystalAntora::Auth::AuthMiddleware do
   end
 
   it "protects all paths when no components specified" do
-    playbook = CrystalAntora::Playbook.new
+    playbook = Antora::Playbook.new
     playbook.auth.enabled = true
     playbook.auth.protected_components = [] of String
     playbook.auth.protected_modules = [] of String
 
-    middleware = CrystalAntora::Auth::AuthMiddleware.new(playbook)
+    middleware = Antora::Auth::AuthMiddleware.new(playbook)
 
     middleware.protected?("/anything").should be_true
   end
 
   it "is disabled by default" do
-    playbook = CrystalAntora::Playbook.new
-    middleware = CrystalAntora::Auth::AuthMiddleware.new(playbook)
+    playbook = Antora::Playbook.new
+    middleware = Antora::Auth::AuthMiddleware.new(playbook)
 
     middleware.enabled?.should be_false
     middleware.protected?("/admin/index.html").should be_false
   end
 
   it "manages sessions" do
-    playbook = CrystalAntora::Playbook.new
+    playbook = Antora::Playbook.new
     playbook.auth.enabled = true
 
-    middleware = CrystalAntora::Auth::AuthMiddleware.new(playbook)
-    user = CrystalAntora::Auth::AuthUser.new(name: "testuser", email: "test@example.com")
+    middleware = Antora::Auth::AuthMiddleware.new(playbook)
+    user = Antora::Auth::AuthUser.new(name: "testuser", email: "test@example.com")
 
     session_id = middleware.create_session(user)
     middleware.authenticated?(session_id).should be_true
@@ -655,10 +655,10 @@ describe "Init command scaffold" do
       File.exists?("modules/ROOT/nav.adoc").should be_true
       File.exists?("modules/ROOT/pages/index.adoc").should be_true
 
-      playbook = CrystalAntora::Playbook.load("site.yml")
+      playbook = Antora::Playbook.load("site.yml")
       playbook.site.title.should eq "My Documentation"
 
-      component = CrystalAntora::Component.load("antora.yml")
+      component = Antora::Component.load("antora.yml")
       component.name.should eq "my-project"
     end
   end

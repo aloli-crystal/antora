@@ -1,4 +1,4 @@
-module CrystalAntora
+module Antora
   module Auth
     class AuthMiddleware
       property playbook : Playbook

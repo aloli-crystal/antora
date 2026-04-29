@@ -1,6 +1,6 @@
 require "yaml"
 
-module CrystalAntora
+module Antora
   class Component
     property name : String
     property title : String

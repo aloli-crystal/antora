@@ -1,4 +1,4 @@
-module CrystalAntora
+module Antora
   class Converter
     property catalog : ContentCatalog
 

@@ -1,4 +1,4 @@
-module CrystalAntora
+module Antora
   class PageComposer
     property playbook : Playbook
     property catalog : ContentCatalog

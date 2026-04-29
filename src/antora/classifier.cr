@@ -1,4 +1,4 @@
-module CrystalAntora
+module Antora
   enum FileFamily
     Page
     Partial

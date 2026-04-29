@@ -1,4 +1,4 @@
-module CrystalAntora
+module Antora
   class ContentCatalog
     property components : Array(Component)
     property files : Array(ContentFile)

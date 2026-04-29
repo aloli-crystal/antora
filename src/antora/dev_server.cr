@@ -1,4 +1,4 @@
-module CrystalAntora
+module Antora
   class DevServer
     property playbook : Playbook
     property catalog : ContentCatalog
