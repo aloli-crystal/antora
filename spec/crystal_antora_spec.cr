@@ -1,6 +1,7 @@
 require "spec"
 require "../src/antora"
 require "file_utils"
+require "yaml"
 
 SPEC_TMP = File.join(Dir.tempdir, "crystal_antora_spec_#{Random::Secure.hex(4)}")
 
@@ -14,8 +15,13 @@ def cleanup_test_dir
 end
 
 describe Antora do
-  it "has a version" do
-    Antora::VERSION.should eq "0.1.0"
+  it "VERSION matche shard.yml (compile-time read, pas de désynchro possible)" do
+    yml = YAML.parse(File.read(File.join(__DIR__, "..", "shard.yml")))
+    Antora::VERSION.should eq(yml["version"].as_s)
+  end
+
+  it "VERSION est au format SemVer X.Y.Z" do
+    Antora::VERSION.should match(/^\d+\.\d+\.\d+$/)
   end
 end
 
