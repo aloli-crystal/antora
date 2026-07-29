@@ -1,4 +1,4 @@
-require "crystal-saml"
+require "saml"
 
 module Antora
   module Auth

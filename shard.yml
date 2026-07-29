@@ -1,5 +1,5 @@
 name: antora
-version: 0.1.4
+version: 0.1.5
 description: |
   AsciiDoc documentation site generator for Crystal, inspired by Antora.
   Generates static multi-component documentation sites from AsciiDoc sources.
@@ -8,20 +8,20 @@ authors:
   - Philippe Nénert <philippe@aloli.fr>
 license: MIT
 dependencies:
-  crystal-asciidoctor:
-    github: aloli-crystal/crystal-asciidoctor
-    version: "~> 2.0"
-  crystal-rouge:
-    github: aloli-crystal/crystal-rouge
-    version: "~> 4.7"
+  asciicrystal:
+    github: aloli-crystal/asciicrystal
+    version: "~> 2.0.26.12"
+  rouge:
+    github: aloli-crystal/rouge
+    version: "~> 4.7.0.3"
   kemal:
     github: kemalcr/kemal
     version: "~> 1.5"
   kemal-auth:
     github: aloli-crystal/kemal-auth
     version: "~> 0.1"
-  crystal-saml:
-    github: aloli-crystal/crystal-saml
+  saml:
+    github: aloli-crystal/saml
     branch: production
 development_dependencies:
   ameba:

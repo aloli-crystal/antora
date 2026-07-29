@@ -7,6 +7,15 @@ Toutes les modifications notables de ce projet sont documentées dans ce fichier
 Le format s'inspire de https://keepachangelog.com/fr/1.1.0/[Keep a Changelog]
 et ce projet suit https://semver.org/lang/fr/[Semantic Versioning].
 
+== 0.1.5 (28 juillet 2026)
+
+=== Modifié
+
+* **Dépendances renommées** (abandon du préfixe `crystal-` dans l'org `aloli-crystal`) :
+  `crystal-asciidoctor` → `asciicrystal` (`~> 2.0.26.12`), `crystal-rouge` → `rouge`
+  (`~> 4.7.0.3`), `crystal-saml` → `saml`. Le `require "crystal-saml"` devient `require "saml"`.
+  La mention « communauté Asciidoctor » (projet upstream) est conservée.
+
 == 0.1.2 (29 avril 2026)
 
 === Modifié
