@@ -45,38 +45,38 @@ describe Antora::Playbook do
       setup_test_dir
       site_yml = File.join(SPEC_TMP, "site.yml")
       File.write(site_yml, <<-YAML
-      site:
-        title: "Test Docs"
-        url: https://test.example.com
-        start_page: mycomp::index.adoc
-      content:
-        sources:
-          - url: ./docs
-            branches: HEAD
-            start_path: .
-      ui:
-        bundle: default
-      output:
-        dir: ./build/site
-      auth:
-        enabled: true
-        provider: kemal-auth
-        protected_components:
-          - admin
-          - internal
-        protected_modules: []
-        login_page: /login
-        session_secret: test-secret
-        saml:
-          idp_sso_url: https://idp.example.com/sso
-          idp_cert: CERTDATA
-          sp_entity_id: https://sp.example.com
-          assertion_consumer_url: https://sp.example.com/saml/callback
-      server:
-        host: 0.0.0.0
-        port: 8080
-        livereload: false
-      YAML
+        site:
+          title: "Test Docs"
+          url: https://test.example.com
+          start_page: mycomp::index.adoc
+        content:
+          sources:
+            - url: ./docs
+              branches: HEAD
+              start_path: .
+        ui:
+          bundle: default
+        output:
+          dir: ./build/site
+        auth:
+          enabled: true
+          provider: kemal-auth
+          protected_components:
+            - admin
+            - internal
+          protected_modules: []
+          login_page: /login
+          session_secret: test-secret
+          saml:
+            idp_sso_url: https://idp.example.com/sso
+            idp_cert: CERTDATA
+            sp_entity_id: https://sp.example.com
+            assertion_consumer_url: https://sp.example.com/saml/callback
+        server:
+          host: 0.0.0.0
+          port: 8080
+          livereload: false
+        YAML
       )
 
       playbook = Antora::Playbook.load(site_yml)
@@ -125,12 +125,12 @@ describe Antora::Playbook do
       ENV["ANTORA_TEST_SECRET"] = "my-secret-key"
       site_yml = File.join(SPEC_TMP, "site.yml")
       File.write(site_yml, <<-YAML
-      site:
-        title: EnvTest
-      auth:
-        enabled: false
-        session_secret: ${ANTORA_TEST_SECRET}
-      YAML
+        site:
+          title: EnvTest
+        auth:
+          enabled: false
+          session_secret: ${ANTORA_TEST_SECRET}
+        YAML
       )
 
       playbook = Antora::Playbook.load(site_yml)
@@ -147,12 +147,12 @@ describe Antora::Component do
     setup_test_dir
     antora_yml = File.join(SPEC_TMP, "antora.yml")
     File.write(antora_yml, <<-YAML
-    name: my-component
-    title: My Component
-    version: '1.0'
-    nav:
-      - modules/ROOT/nav.adoc
-    YAML
+      name: my-component
+      title: My Component
+      version: '1.0'
+      nav:
+        - modules/ROOT/nav.adoc
+      YAML
     )
 
     component = Antora::Component.load(antora_yml)
@@ -227,10 +227,10 @@ end
 describe Antora::Navigation do
   it "parses simple nav.adoc" do
     content = <<-NAV
-    * xref:index.adoc[Home]
-    * xref:getting-started.adoc[Getting Started]
-    * xref:reference.adoc[Reference]
-    NAV
+      * xref:index.adoc[Home]
+      * xref:getting-started.adoc[Getting Started]
+      * xref:reference.adoc[Reference]
+      NAV
 
     nav = Antora::Navigation.parse(content)
     nav.items.size.should eq 3
@@ -242,12 +242,12 @@ describe Antora::Navigation do
 
   it "parses nested nav.adoc" do
     content = <<-NAV
-    * xref:index.adoc[Home]
-    * xref:getting-started.adoc[Getting Started]
-    ** xref:installation.adoc[Installation]
-    ** xref:tutorial.adoc[Tutorial]
-    * xref:reference.adoc[Reference]
-    NAV
+      * xref:index.adoc[Home]
+      * xref:getting-started.adoc[Getting Started]
+      ** xref:installation.adoc[Installation]
+      ** xref:tutorial.adoc[Tutorial]
+      * xref:reference.adoc[Reference]
+      NAV
 
     nav = Antora::Navigation.parse(content)
     nav.items.size.should eq 3
@@ -259,10 +259,10 @@ describe Antora::Navigation do
 
   it "finds prev/next pages" do
     content = <<-NAV
-    * xref:page1.adoc[Page 1]
-    * xref:page2.adoc[Page 2]
-    * xref:page3.adoc[Page 3]
-    NAV
+      * xref:page1.adoc[Page 1]
+      * xref:page2.adoc[Page 2]
+      * xref:page3.adoc[Page 3]
+      NAV
 
     nav = Antora::Navigation.parse(content)
 
@@ -277,10 +277,10 @@ describe Antora::Navigation do
 
   it "finds breadcrumbs" do
     content = <<-NAV
-    * xref:index.adoc[Home]
-    * xref:getting-started.adoc[Getting Started]
-    ** xref:installation.adoc[Installation]
-    NAV
+      * xref:index.adoc[Home]
+      * xref:getting-started.adoc[Getting Started]
+      ** xref:installation.adoc[Installation]
+      NAV
 
     nav = Antora::Navigation.parse(content)
     crumbs = nav.find_breadcrumbs("installation.adoc")
@@ -307,18 +307,18 @@ describe Antora::Converter do
     FileUtils.mkdir_p(page_dir)
     page_path = File.join(page_dir, "test.adoc")
     File.write(page_path, <<-ADOC
-    = Test Page
+      = Test Page
 
-    This is a paragraph.
+      This is a paragraph.
 
-    == Section One
+      == Section One
 
-    Some content here.
+      Some content here.
 
-    === Subsection
+      === Subsection
 
-    More content.
-    ADOC
+      More content.
+      ADOC
     )
 
     page = Antora::ContentFile.new(
@@ -346,13 +346,13 @@ describe Antora::Converter do
     FileUtils.mkdir_p(page_dir)
     page_path = File.join(page_dir, "code.adoc")
     File.write(page_path, <<-ADOC
-    = Code Example
+      = Code Example
 
-    [source,crystal]
-    ----
-    puts "Hello"
-    ----
-    ADOC
+      [source,crystal]
+      ----
+      puts "Hello"
+      ----
+      ADOC
     )
 
     page = Antora::ContentFile.new(path: page_path, family: Antora::FileFamily::Page)
@@ -371,10 +371,10 @@ describe Antora::Converter do
     FileUtils.mkdir_p(page_dir)
     page_path = File.join(page_dir, "links.adoc")
     File.write(page_path, <<-ADOC
-    = Links
+      = Links
 
-    See xref:other.adoc[Other Page] for details.
-    ADOC
+      See xref:other.adoc[Other Page] for details.
+      ADOC
     )
 
     page = Antora::ContentFile.new(path: page_path, family: Antora::FileFamily::Page)
@@ -422,10 +422,10 @@ describe Antora::PageComposer do
     FileUtils.mkdir_p(page_dir)
     page_path = File.join(page_dir, "index.adoc")
     File.write(page_path, <<-ADOC
-    = Home Page
+      = Home Page
 
-    Welcome to the docs.
-    ADOC
+      Welcome to the docs.
+      ADOC
     )
 
     page = Antora::ContentFile.new(
@@ -613,42 +613,42 @@ describe "Init command scaffold" do
       FileUtils.mkdir_p("modules/ROOT/attachments")
 
       File.write("site.yml", <<-YAML
-      site:
-        title: "My Documentation"
-      content:
-        sources:
-          - url: .
-            branches: HEAD
-            start_path: .
-      ui:
-        bundle: default
-      output:
-        dir: ./build/site
-      auth:
-        enabled: false
-      server:
-        host: localhost
-        port: 4000
-        livereload: true
-      YAML
+        site:
+          title: "My Documentation"
+        content:
+          sources:
+            - url: .
+              branches: HEAD
+              start_path: .
+        ui:
+          bundle: default
+        output:
+          dir: ./build/site
+        auth:
+          enabled: false
+        server:
+          host: localhost
+          port: 4000
+          livereload: true
+        YAML
       )
 
       File.write("antora.yml", <<-YAML
-      name: my-project
-      title: My Project
-      version: '1.0'
-      nav:
-        - modules/ROOT/nav.adoc
-      YAML
+        name: my-project
+        title: My Project
+        version: '1.0'
+        nav:
+          - modules/ROOT/nav.adoc
+        YAML
       )
 
       File.write("modules/ROOT/nav.adoc", "* xref:index.adoc[Home]\n")
 
       File.write("modules/ROOT/pages/index.adoc", <<-ADOC
-      = Welcome
+        = Welcome
 
-      Welcome to your documentation site!
-      ADOC
+        Welcome to your documentation site!
+        ADOC
       )
 
       File.exists?("site.yml").should be_true

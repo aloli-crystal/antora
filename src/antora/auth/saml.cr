@@ -28,7 +28,7 @@ module Antora
           response = CrystalSaml::Response.new(settings: settings, raw_base64: saml_response_b64)
 
           unless response.valid?(skip_signature: config.idp_cert.empty?)
-            return nil
+            return
           end
 
           name_id = response.name_id || ""
@@ -46,7 +46,7 @@ module Antora
             email: email,
             attributes: attributes
           )
-        rescue ex
+        rescue
           nil
         end
       end

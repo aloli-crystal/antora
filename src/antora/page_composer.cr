@@ -153,68 +153,68 @@ module Antora
     ) : String
       livereload_script = if livereload
                             <<-JS
-                            <script>
-                            (function() {
-                              var lastUpdate = '';
-                              setInterval(function() {
-                                fetch('/_/livereload')
-                                  .then(function(r) { return r.text(); })
-                                  .then(function(t) {
-                                    if (lastUpdate && lastUpdate !== t) {
-                                      window.location.reload();
-                                    }
-                                    lastUpdate = t;
-                                  })
-                                  .catch(function() {});
-                              }, 2000);
-                            })();
-                            </script>
-                            JS
+                              <script>
+                              (function() {
+                                var lastUpdate = '';
+                                setInterval(function() {
+                                  fetch('/_/livereload')
+                                    .then(function(r) { return r.text(); })
+                                    .then(function(t) {
+                                      if (lastUpdate && lastUpdate !== t) {
+                                        window.location.reload();
+                                      }
+                                      lastUpdate = t;
+                                    })
+                                    .catch(function() {});
+                                }, 2000);
+                              })();
+                              </script>
+                              JS
                           else
                             ""
                           end
 
       <<-HTML
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>#{HTML.escape(page_title)} | #{HTML.escape(site_title)}</title>
-        <style>
-      #{Theme::CSS}
-        </style>
-      </head>
-      <body>
-        <header class="site-header">
-          <div class="header-inner">
-            <a class="site-title" href="/">#{HTML.escape(site_title)}</a>
-            #{component_selector_html}
-            <div class="search-placeholder">
-              <input type="text" placeholder="Search docs..." disabled>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>#{HTML.escape(page_title)} | #{HTML.escape(site_title)}</title>
+          <style>
+        #{Theme::CSS}
+          </style>
+        </head>
+        <body>
+          <header class="site-header">
+            <div class="header-inner">
+              <a class="site-title" href="/">#{HTML.escape(site_title)}</a>
+              #{component_selector_html}
+              <div class="search-placeholder">
+                <input type="text" placeholder="Search docs..." disabled>
+              </div>
             </div>
+          </header>
+          <div class="main-wrapper">
+            <aside class="sidebar">
+              #{nav_html}
+            </aside>
+            <main class="content">
+              #{breadcrumbs_html}
+              <article class="doc">
+                #{content_html}
+              </article>
+              #{prev_next_html}
+            </main>
+            #{toc_html}
           </div>
-        </header>
-        <div class="main-wrapper">
-          <aside class="sidebar">
-            #{nav_html}
-          </aside>
-          <main class="content">
-            #{breadcrumbs_html}
-            <article class="doc">
-              #{content_html}
-            </article>
-            #{prev_next_html}
-          </main>
-          #{toc_html}
-        </div>
-        <footer class="site-footer">
-          <p>Built with <a href="https://github.com/aloli-crystal/crystal-antora">Crystal Antora</a></p>
-        </footer>
-        #{livereload_script}
-      </body>
-      </html>
-      HTML
+          <footer class="site-footer">
+            <p>Built with <a href="https://github.com/aloli-crystal/crystal-antora">Crystal Antora</a></p>
+          </footer>
+          #{livereload_script}
+        </body>
+        </html>
+        HTML
     end
   end
 end

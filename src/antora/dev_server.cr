@@ -120,28 +120,28 @@ module Antora
     private def serve_login_page(context : HTTP::Server::Context)
       context.response.content_type = "text/html"
       context.response.print <<-HTML
-      <!DOCTYPE html>
-      <html><head><title>Login | #{HTML.escape(playbook.site.title)}</title>
-      <style>#{Theme::CSS}</style></head>
-      <body>
-      <header class="site-header"><div class="header-inner">
-        <a class="site-title" href="/">#{HTML.escape(playbook.site.title)}</a>
-      </div></header>
-      <div class="main-wrapper"><main class="content" style="max-width:400px;margin:2rem auto;">
-        <h1>Login</h1>
-        <form method="POST" action="/login" style="margin-top:1rem;">
-          <div style="margin-bottom:1rem;">
-            <label>Username</label><br>
-            <input type="text" name="username" required style="width:100%;padding:0.5rem;">
-          </div>
-          <div style="margin-bottom:1rem;">
-            <label>Password</label><br>
-            <input type="password" name="password" required style="width:100%;padding:0.5rem;">
-          </div>
-          <button type="submit" style="padding:0.5rem 1.5rem;background:var(--color-brand);color:#fff;border:none;border-radius:4px;cursor:pointer;">Login</button>
-        </form>
-      </main></div></body></html>
-      HTML
+        <!DOCTYPE html>
+        <html><head><title>Login | #{HTML.escape(playbook.site.title)}</title>
+        <style>#{Theme::CSS}</style></head>
+        <body>
+        <header class="site-header"><div class="header-inner">
+          <a class="site-title" href="/">#{HTML.escape(playbook.site.title)}</a>
+        </div></header>
+        <div class="main-wrapper"><main class="content" style="max-width:400px;margin:2rem auto;">
+          <h1>Login</h1>
+          <form method="POST" action="/login" style="margin-top:1rem;">
+            <div style="margin-bottom:1rem;">
+              <label>Username</label><br>
+              <input type="text" name="username" required style="width:100%;padding:0.5rem;">
+            </div>
+            <div style="margin-bottom:1rem;">
+              <label>Password</label><br>
+              <input type="password" name="password" required style="width:100%;padding:0.5rem;">
+            </div>
+            <button type="submit" style="padding:0.5rem 1.5rem;background:var(--color-brand);color:#fff;border:none;border-radius:4px;cursor:pointer;">Login</button>
+          </form>
+        </main></div></body></html>
+        HTML
     end
 
     private def handle_login(context : HTTP::Server::Context)

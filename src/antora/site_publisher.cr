@@ -88,35 +88,35 @@ module Antora
 
     private def generate_404(output_dir : String)
       html = <<-HTML
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>404 - Page Not Found | #{HTML.escape(playbook.site.title)}</title>
-        <style>
-      #{Theme::CSS}
-        </style>
-      </head>
-      <body>
-        <header class="site-header">
-          <div class="header-inner">
-            <a class="site-title" href="/">#{HTML.escape(playbook.site.title)}</a>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>404 - Page Not Found | #{HTML.escape(playbook.site.title)}</title>
+          <style>
+        #{Theme::CSS}
+          </style>
+        </head>
+        <body>
+          <header class="site-header">
+            <div class="header-inner">
+              <a class="site-title" href="/">#{HTML.escape(playbook.site.title)}</a>
+            </div>
+          </header>
+          <div class="main-wrapper">
+            <main class="content" style="text-align: center; padding: 4rem 2rem;">
+              <h1>404</h1>
+              <p>The page you are looking for does not exist.</p>
+              <a href="/">Return to home</a>
+            </main>
           </div>
-        </header>
-        <div class="main-wrapper">
-          <main class="content" style="text-align: center; padding: 4rem 2rem;">
-            <h1>404</h1>
-            <p>The page you are looking for does not exist.</p>
-            <a href="/">Return to home</a>
-          </main>
-        </div>
-        <footer class="site-footer">
-          <p>Built with <a href="https://github.com/aloli-crystal/crystal-antora">Crystal Antora</a></p>
-        </footer>
-      </body>
-      </html>
-      HTML
+          <footer class="site-footer">
+            <p>Built with <a href="https://github.com/aloli-crystal/crystal-antora">Crystal Antora</a></p>
+          </footer>
+        </body>
+        </html>
+        HTML
 
       File.write(File.join(output_dir, "404.html"), html)
     end
