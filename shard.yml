@@ -1,5 +1,5 @@
 name: antora
-version: 0.1.6
+version: 0.1.7
 description: |
   AsciiDoc documentation site generator for Crystal, inspired by Antora.
   Generates static multi-component documentation sites from AsciiDoc sources.
